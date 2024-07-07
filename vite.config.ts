@@ -19,5 +19,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom'
+  },
+  server: {
+    host: 'api.reanmo-tweeter.de',
+    port: 8080,
+    https: {
+      key: 'C:\\certificates\\_wildcard.reanmo-tweeter.de-key.pem',
+      cert: 'C:\\certificates\\_wildcard.reanmo-tweeter.de.pem',
+    },
   }
 })

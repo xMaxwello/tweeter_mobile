@@ -1,31 +1,34 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
+import tweetView from "@/views/tweetView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/tab1'
+    component: () => import('@/views/loginView.vue')
   },
   {
-    path: '/tabs/',
+    path: '/tweet/:id',
+    name: 'TweetView',
+    component: tweetView,
+    props: true
+  },
+  {
+    path: '/',
     component: TabsPage,
     children: [
       {
-        path: '',
-        redirect: '/tabs/tab1'
+        path: 'home',
+        component: () => import('@/views/homeView.vue')
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        path: 'profile',
+        component: () => import('@/views/myProfileView.vue')
       },
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
-      },
-      {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
+        path: 'settings',
+        component: () => import('@/views/settingsView.vue')
       }
     ]
   }

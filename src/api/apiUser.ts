@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { apiUrl, apiConfig } from "./apiConfig";
-import { MyAccount } from "../types/myAccount";
-import {authError} from "./apiError.ts";
+import { MyAccount } from "@/types/myAccount";
+import {authError} from "@/api/apiError";
+import {UserAccount} from "@/types/userAccount";
 
 
 

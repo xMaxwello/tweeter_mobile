@@ -40,7 +40,7 @@ const errorMessage = ref('');
 const confirmMessage = ref('');
 let messageTimeout = null;
 
-function setMessage(type, message, duration = 5000) {
+function setMessage(type: string, message: string, duration = 5000) {
   if (messageTimeout) {
     clearTimeout(messageTimeout);
   }

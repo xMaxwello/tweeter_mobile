@@ -70,7 +70,7 @@ const refreshTweets = async () => {
   await loadTweets();
 };
 
-const switchView = (mode) => {
+const switchView = (mode: string) => {
   tweets = reactive([]);
   currentPage.value = 1;
   hasMoreTweets.value = true;
@@ -80,7 +80,7 @@ const switchView = (mode) => {
 
 onMounted(loadTweets);
 
-function navigateToTweetDetails(tweetId) {
+function navigateToTweetDetails(tweetId: number) {
   router.push({ name: 'TweetDetails', params: { id: tweetId } });
 }
 </script>

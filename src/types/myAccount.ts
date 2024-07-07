@@ -1,4 +1,4 @@
-import {UserAccount} from "./userAccount.ts";
+import {UserAccount} from "@/types/userAccount";
 
 interface MyAccount extends UserAccount {
     first_name: string;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {apiConfig, apiUrl} from "./apiConfig";
-import { Tweet } from "../types/userTweets.ts";
+import { Tweet } from "@/types/userTweets";
 
 const fetchTweets = async (page: number):Promise<Tweet[] | null> => {
     if(page != null && page != 0){

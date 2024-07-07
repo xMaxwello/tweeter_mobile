@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {logout} from "../api/apiLogin.ts";
+import {logout} from "@/api/apiLogin";
 import router from "../router";
-import {useMyAccountStore} from "../stores/myAccountStore";
+import {useMyAccountStore} from "@/stores/myAccountStore";
 
 const myAccountStore = useMyAccountStore();
 

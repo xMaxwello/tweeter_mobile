@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonPage, IonContent } from '@ionic/vue';
 import {authenticateUser, getCsrfCookie} from "@/api/apiLogin";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";

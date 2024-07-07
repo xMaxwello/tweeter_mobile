@@ -11,7 +11,7 @@ const emits = defineEmits(['close']);
 
 let messageTimeout = 0;
 
-function setMessage(type, message, duration = 5000) {
+function setMessage(type: string, message: string, duration = 5000) {
   if (messageTimeout) {
     clearTimeout(messageTimeout);
   }

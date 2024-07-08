@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { IonPage, IonContent } from '@ionic/vue';
 import {authenticateUser, getCsrfCookie} from "@/api/apiLogin";
+import { useMyAccountStore } from '@/stores/myAccountStore';
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 
@@ -8,18 +9,24 @@ const router = useRouter();
 const email = ref('admin@reanmo.com');
 const password = ref('password');
 const authErr = ref();
+const myAccountStore = useMyAccountStore();
 
-onMounted(() => {
-  getCsrfCookie();
+
+onMounted(async () => {
+  await getCsrfCookie();
+  if (myAccountStore.isMyAccountAuth()) {
+    await router.push({name: 'HomeView'});
+  }
 });
 
 const login = async () => {
   try {
+    await getCsrfCookie();
     const isAuthenticated = await authenticateUser(email.value, password.value);
     if (isAuthenticated) {
-      await router.push("/home");
+      await router.push({ name: 'HomeView' });
     } else {
-      authErr.value = "Login fehlgeschlagen";
+      authErr.value = "Login failed";
     }
   } catch (error) {
     authErr.value = error.message;

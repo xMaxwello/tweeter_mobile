@@ -131,7 +131,7 @@ function navigateToTweetView(tweetId) {
 
           </div>
 
-          <ion-infinite-scroll threshold="100px" @ionInfinite="loadData">
+          <ion-infinite-scroll threshold="50px" @ionInfinite="loadData">
             <ion-infinite-scroll-content
                 loading-spinner="dots"
                 loading-text="">

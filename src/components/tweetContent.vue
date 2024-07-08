@@ -5,6 +5,7 @@ import {useRoute} from "vue-router";
 import generatePFP from "./generatePFP.vue";
 const emit = defineEmits(['clickedLike', 'openTweet']);
 
+
 const props = defineProps({
       id:{
         type: Number,

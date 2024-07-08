@@ -132,9 +132,9 @@ const handleLikeCommentToggle = async (comment) => {
           <!-- Comments Section -->
             <hr class="w-full my-4 border-white border-opacity-10"/>
             <div>
-              <h1 v-if="tweet.comments_count == 0" class="text-white"> Es wurde noch kein Kommentar gepostet</h1>
-              <h1 v-else-if="tweet.comments_count == 1" class="text-white"> 1 Kommentar</h1>
-              <h1 v-else class="text-white">{{tweet.comments_count}} Kommentare</h1>
+              <h1 v-if="tweet.comments_count == 0" class="text-white text-base"> Es wurde noch kein Kommentar gepostet</h1>
+              <h1 v-else-if="tweet.comments_count == 1" class="text-white text-base"> 1 Kommentar</h1>
+              <h1 v-else class="text-white text-base">{{tweet.comments_count}} Kommentare</h1>
             </div>
             <div v-for="comment in tweet.comments" :key="comment.id">
               <div class="flex mt-3">
@@ -147,10 +147,10 @@ const handleLikeCommentToggle = async (comment) => {
 
                 <div class="flex flex-col flex-grow pl-4">
                   <div class="flex items-center">
-                    <h2 class="text-white font-medium">{{comment.user.full_name}}</h2>
+                    <h2 class="text-white font-medium text-base">{{comment.user.full_name}}</h2>
                     <p class="text-gray-400 text-xs pl-4">{{ comment.created_at }}</p>
                   </div>
-                  <p class="text-white text-sm mt-2 break-words w-[640px]">{{ comment.body }}</p>
+                  <p class="text-white text-sm mt-2 break-words whitespace-pre-wrap">{{ comment.body }}</p>
 
                   <div class="flex flex-row text-sm mt-4">
                     <div class="flex flex-row items-center pr-14">

@@ -110,15 +110,15 @@ function navigateToTweetDetails(tweetId: number) {
           <div class="w-full flex justify-around items-center">
             <button
                 @click="switchView('posts')"
-                :class="viewMode === 'posts' ? 'underline underline-offset-4' : ''"
-                class="text-white font-medium py-2 px-4"
+                :class="viewMode === 'posts' ? 'border-b-2 border-homeCard' : ''"
+                class="text-white font-medium py-2 px-4 transition-colors duration-200"
             >
               Meine Beiträge
             </button>
             <button
                 @click="switchView('likes')"
-                :class="viewMode === 'likes' ? 'underline underline-offset-4' : ''"
-                class="text-white font-medium py-2 px-4"
+                :class="viewMode === 'likes' ? 'border-b-2 border-homeCard' : ''"
+                class="text-white font-medium py-2 px-4 transition-colors duration-200"
             >
               Meine Likes
             </button>

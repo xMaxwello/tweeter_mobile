@@ -172,29 +172,28 @@ const handleProfileEmail = async () => {
         <button @click="clickProfilePictureUpload" class="text-xs md:text-sm lg:text-base font-semibold text-homeCard">Bild hochladen</button>
       </div>
 
-      <div class="w-full flex justify-between items-center text-white py-2">
+      <div class="w-full flex flex-col justify-start items-start text-white py-2">
         <p>Vorname</p>
         <input v-model="firstName" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="handleProfileName" type="text" placeholder="Vorname">
       </div>
 
-      <div class="w-full flex justify-between items-center text-white py-2">
+      <div class="w-full flex flex-col justify-start items-start text-white py-2">
         <p>Nachname</p>
         <input v-model="lastName" class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="text" @keydown.enter="handleProfileName" placeholder="Nachname">
       </div>
 
-      <div class="w-full flex justify-between items-center text-white py-2">
+      <div class="w-full flex flex-col justify-start items-start text-white py-2">
         <p>E-Mail</p>
         <input class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="email" v-model="email" @blur="changeEmail" @keydown.enter="changeEmail" @input="changeEmail">
       </div>
 
-      <div v-if="emailChanged" class="w-full flex justify-between items-center text-white py-2">
+      <div v-if="emailChanged" class="w-full flex flex-col justify-start items-start text-white py-2">
         <p>E-Mail wiederholen</p>
         <input class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="email" v-model="emailConfirmation" @blur="handleProfileEmail" @keydown.enter="handleProfileEmail" >
       </div>
 
       <div class="relative">
-        <div class="w-full flex justify-between items-center text-white pt-4">
-          <p>Passwort</p>
+        <div class="w-full flex justify-start items-start text-white pt-4">
           <button @click="showPasswordDialog = true" class="w-[170px] h-10 rounded-md bg-homeCard text-black font-semibold">Passwort ändern</button>
         </div>
         <div v-if="showPasswordDialog" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" @click="showPasswordDialog = false">

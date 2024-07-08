@@ -58,8 +58,11 @@ const loadTweets = async () => {
 };
 
 const loadData = async (event) => {
+  console.log("loadData called");
   await loadTweets();
-  event.target.complete();
+  setTimeout(() => {
+    event.target.complete();
+  }, 500); // Small timeout to ensure the event is properly handled
 };
 
 onMounted(loadTweets);
@@ -75,11 +78,9 @@ function navigateToTweetView(tweetId) {
 }
 </script>
 
-
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" style="--background: #001c30">
-
+    <ion-content :fullscreen="true" style="--background: #001c30" scroll-events>
 
       <div class="flex justify-center py-24">
         <div class="w-full max-w-[751px] h-full pb-4 px-5 mx-auto">
@@ -131,7 +132,7 @@ function navigateToTweetView(tweetId) {
 
           </div>
 
-          <ion-infinite-scroll threshold="50px" @ionInfinite="loadData">
+          <ion-infinite-scroll threshold="300px" @ionInfinite="loadData">
             <ion-infinite-scroll-content
                 loading-spinner="dots"
                 loading-text="">

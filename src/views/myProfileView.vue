@@ -2,22 +2,23 @@
 import { IonPage, IonContent } from '@ionic/vue';
 import tweetContent from "../components/tweetContent.vue";
 import router from "../router";
-import { onBeforeMount, onMounted, reactive, ref } from "vue";
+import { onBeforeMount, onMounted, reactive, ref, watch } from "vue";
 import { Tweet } from "@/types/userTweets";
 import { fetchMyTweets, fetchTweets } from "@/api/apiTweet";
-import loadSpinner from "../components/loadSpinner.vue";
 import { useMyAccountStore } from "@/stores/myAccountStore";
 import { MyAccount } from "@/types/myAccount";
 import { getAuthenticatedUser } from "@/api/apiUser";
 import generatePFP from "../components/generatePFP.vue";
+import { useLoadingStore } from '@/stores/loadingStore';
+
+const loadingStore = useLoadingStore();
 
 let tweets = reactive<Tweet[]>([]);
 const currentPage = ref(1);
-const isLoading = ref(false);
 const hasMoreTweets = ref(true);
 const viewMode = ref('posts');
 const myAccountStore = useMyAccountStore();
-const myAccount = ref<MyAccount|null>(myAccountStore.getMyAccount());
+const myAccount = ref<MyAccount | null>(myAccountStore.getMyAccount());
 const profilePicture = ref(myAccount.value?.avatar_url);
 const fullName = ref(myAccount.value?.full_name);
 
@@ -31,13 +32,16 @@ onBeforeMount(async () => {
   }
   if (!myAccountStore.isMyAccountAuth) {
     await router.push("/login");
+  } else {
+    await loadTweets();
   }
+  loadingStore.setLoading(false);
 });
 
 const loadTweets = async () => {
-  if (isLoading.value || !hasMoreTweets.value) return;
+  if (loadingStore.isLoading || !hasMoreTweets.value) return;
 
-  isLoading.value = true;
+  loadingStore.setLoading(true);
   try {
     let fetchedTweets;
     if (viewMode.value === 'posts') {
@@ -55,7 +59,7 @@ const loadTweets = async () => {
   } catch (error) {
     console.error("Failed to load tweets:", error);
   } finally {
-    isLoading.value = false;
+    loadingStore.setLoading(false);
   }
 };
 
@@ -78,7 +82,11 @@ const switchView = (mode: string) => {
   loadTweets();
 };
 
-onMounted(loadTweets);
+onMounted(() => {
+  if (!loadingStore.isLoading) {
+    loadTweets();
+  }
+});
 
 function navigateToTweetDetails(tweetId: number) {
   router.push({ name: 'TweetDetails', params: { id: tweetId } });
@@ -100,8 +108,6 @@ function navigateToTweetDetails(tweetId: number) {
             <generatePFP :full-name="fullName" class="w-[100px] h-[100px] text-2xl"/>
           </div>
           <h1 class="pt-4 text-white text-xl font-semibold">{{ fullName }}</h1>
-
-
         </div>
       </div>
 
@@ -138,7 +144,6 @@ function navigateToTweetDetails(tweetId: number) {
                 @clickedLike="refreshTweets"
             />
           </div>
-          <loadSpinner v-if="isLoading" class="pt-10"/>
 
           <ion-infinite-scroll threshold="100px" @ionInfinite="loadData">
             <ion-infinite-scroll-content

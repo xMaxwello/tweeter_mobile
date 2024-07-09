@@ -7,19 +7,20 @@ import { fetchTweets } from "@/api/apiTweet";
 import { searchUser } from "@/api/apiUser";
 import searchUserResult from "@/components/searchUserResult.vue";
 import tweetContent from "@/components/tweetContent.vue";
-import loadSpinner from "@/components/loadSpinner.vue";
 import makeTweet from "@/components/makeTweet.vue";
+import {useLoadingStore} from "@/stores/loadingStore";
+
+const loadingStore = useLoadingStore();
 
 const users = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1);
-const isLoading = ref(false);
 const hasMoreTweets = ref(true);
 let tweets = reactive<Tweet[]>([]);
 
 const performSearch = async () => {
   if (!searchQuery.value.trim()) return;
-  isLoading.value = true;
+  loadingStore.isLoading = true;
   try {
     const result = await searchUser(searchQuery.value);
     if (result) {
@@ -30,7 +31,7 @@ const performSearch = async () => {
   } catch (error) {
     console.error('Search failed:', error);
   } finally {
-    isLoading.value = false;
+    loadingStore.isLoading = false;
   }
 };
 
@@ -39,9 +40,9 @@ const clearSearch = () => {
 };
 
 const loadTweets = async () => {
-  if (isLoading.value || !hasMoreTweets.value) return;
+  if (loadingStore.isLoading || !hasMoreTweets.value) return;
 
-  isLoading.value = true;
+  loadingStore.isLoading = true;
   try {
     const newTweets = await fetchTweets(currentPage.value);
     if (newTweets && newTweets.length > 0) {
@@ -53,16 +54,15 @@ const loadTweets = async () => {
   } catch (error) {
     console.error("Failed to load tweets:", error);
   } finally {
-    isLoading.value = false;
+    loadingStore.isLoading = false;
   }
 };
 
 const loadData = async (event) => {
-  console.log("loadData called");
   await loadTweets();
   setTimeout(() => {
     event.target.complete();
-  }, 500); // Small timeout to ensure the event is properly handled
+  }, 500);
 };
 
 onMounted(loadTweets);
@@ -81,7 +81,6 @@ function navigateToTweetView(tweetId) {
 <template>
   <ion-page>
     <ion-content :fullscreen="true" style="--background: #001c30" scroll-events>
-
       <div class="flex justify-center py-24">
         <div class="w-full max-w-[751px] h-full pb-4 px-5 mx-auto">
           <div class="w-full flex justify-between items-center">
@@ -113,7 +112,7 @@ function navigateToTweetView(tweetId) {
           <div v-else>
             <makeTweet @tweet-posted="refreshTweets"/>
 
-            <div v-for="tweet in tweets" :key="tweet.id">
+            <div v-if="!loadingStore.isLoading" v-for="tweet in tweets" :key="tweet.id">
               <tweetContent
                   :id="tweet.id"
                   :profilePicURL="tweet.user.avatar_url"
@@ -127,9 +126,6 @@ function navigateToTweetView(tweetId) {
                   @openTweet="navigateToTweetView"
               />
             </div>
-
-            <loadSpinner v-if="isLoading" class="pt-10"/>
-
           </div>
 
           <ion-infinite-scroll threshold="300px" @ionInfinite="loadData">

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {updateMyAccount} from "@/api/apiUser";
+import { ref } from "vue";
+import { updateMyAccount } from "@/api/apiUser";
+import { modalController } from "@ionic/vue";
 
 const currentPassword = ref('');
 const password = ref('');
 const passwordConfirmation = ref('');
 const errorMessage = ref('');
 const confirmMessage = ref('');
-const emits = defineEmits(['close']);
 
 let messageTimeout = 0;
 
@@ -35,11 +35,11 @@ const validatePassword = () => {
   errorMessage.value = '';
 
   if (!currentPassword.value) {
-    setMessage('error','Bitte geben Sie Ihr aktuelles Passwort ein');
+    setMessage('error', 'Bitte geben Sie Ihr aktuelles Passwort ein');
     return false;
   }
   if (!password.value) {
-    setMessage('error','Bitte geben Sie ein neues Passwort ein');
+    setMessage('error', 'Bitte geben Sie ein neues Passwort ein');
     return false;
   }
   if (password.value.length < 8 || password.value.length > 64) {
@@ -88,36 +88,38 @@ const handleUpdateProfile = async () => {
 };
 
 const closeDialog = () => {
-  emits('close');
+  modalController.dismiss();
 };
-
 </script>
 
 <template>
-  <div class="max-w-[732px] w-full h-[439px] rounded-[10px] p-4 bg-passwordCard text-white flex flex-col">
-    <div class="flex justify-center pb-2">
-      <h1>Passwort ändern</h1>
-    </div>
-    <div class="flex flex-col justify-center py-2">
-      <input v-model="currentPassword" class="w-[340px] h-[52px] px-4 p bg-homeCard bg-opacity-5 rounded-md" type="password" placeholder="Aktuelles Passwort">
-      <input v-model="password" class="w-[340px] h-[52px] px-4 my-4 bg-homeCard bg-opacity-5 rounded-md" type="password" placeholder="Neues Passwort">
-      <input v-model="passwordConfirmation" class="w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="password" placeholder="Passwort wiederholen">
-    </div>
-    <div>
-      <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
-      <p v-if="confirmMessage" class="text-green-700">{{ confirmMessage }}</p>
-    </div>
-    <div class="flex justify-start text-xs py-2">
-      <p>
-        - Benutze 8 bis 64 Zeichen<br/>
-        - Min. 1 Ziffer muss enthalten sein<br/>
-        - Neben Buchstaben, verwende min. 1 Symbol (!@#$%^-_+=)
-      </p>
-    </div>
-    <div class="flex justify-end h-full items-end pb-4">
-      <button @click="closeDialog" class="w-[170px] h-10 rounded-md text-homeCard font-semibold">Abbrechen</button>
-      <button @click="handleUpdateProfile" class="w-[170px] h-10 rounded-md bg-homeCard text-black font-semibold">Speichern</button>
-    </div>
+  <ion-content class="ion-padding">
+    <div class="password-dialog pt-24 max-w-[732px] w-full h-full z-10 rounded-[10px] p-4 bg-passwordCard text-white flex flex-col">
+      <div class="w-full flex justify-between items-center">
+        <h1 class="text-white text-base font-medium">Passwort ändern</h1>
+      </div>
+      <hr class="w-full mt-5 border-white border-opacity-10"/>
 
-  </div>
+      <div class="flex flex-col justify-center py-4">
+        <ion-input v-model="currentPassword" label-placement="floating" class="w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="password" label="Aktuelles Passwort"></ion-input>
+        <ion-input v-model="password" label-placement="floating" class="w-[340px] h-[52px] px-4 my-4 bg-homeCard bg-opacity-5 rounded-md" type="password" label="Neues Passwort"></ion-input>
+        <ion-input v-model="passwordConfirmation" label-placement="floating" class="w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="password" label="Passwort wiederholen"></ion-input>
+      </div>
+      <div>
+        <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
+        <p v-if="confirmMessage" class="text-green-700">{{ confirmMessage }}</p>
+      </div>
+      <div class="flex justify-start text-xs py-2">
+        <p>
+          - Benutze 8 bis 64 Zeichen<br />
+          - Min. 1 Ziffer muss enthalten sein<br />
+          - Neben Buchstaben, verwende min. 1 Symbol (!@#$%^-_+=)
+        </p>
+      </div>
+      <div class="flex justify-end h-full items-end pb-4">
+        <button @click="closeDialog" class="w-[170px] h-10 rounded-md text-homeCard font-semibold">Abbrechen</button>
+        <button @click="handleUpdateProfile" class="w-[170px] h-10 rounded-md bg-homeCard text-black font-semibold">Speichern</button>
+      </div>
+    </div>
+  </ion-content>
 </template>

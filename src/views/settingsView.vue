@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import {onBeforeMount, ref} from "vue";
-import {deleteMyProfilePicture, getAuthenticatedUser, updateMyAccount, updateMyProfilePicture} from "@/api/apiUser";
+import { onBeforeMount, ref } from "vue";
+import { deleteMyProfilePicture, getAuthenticatedUser, updateMyAccount, updateMyProfilePicture } from "@/api/apiUser";
 import PasswordDialog from "../components/passwordDialog.vue";
-import {MyAccount} from "@/types/myAccount";
-import {useMyAccountStore} from "@/stores/myAccountStore";
+import { MyAccount } from "@/types/myAccount";
+import { useMyAccountStore } from "@/stores/myAccountStore";
 import router from "../router";
 import generatePFP from "../components/generatePFP.vue";
-import {IonContent, IonPage} from "@ionic/vue";
+import {IonContent, IonPage, IonInput, modalController} from "@ionic/vue";
 
 const myAccountStore = useMyAccountStore();
 const myAccount = ref<MyAccount|null>(myAccountStore.getMyAccount());
@@ -144,72 +144,66 @@ const handleProfileEmail = async () => {
   }
 }
 
+const presentModal = async () => {
+  const modal = await modalController.create({
+    component: PasswordDialog,
+  });
+  return modal.present();
+}
 </script>
 
 <template>
   <ion-page>
     <ion-content :fullscreen="true" style="--background: #001c30">
-  <div class="flex justify-center pt-24">
-    <div class="w-full w-max-[751px] h-auto px-5">
-      <div class="w-full flex justify-between items-center">
-        <h1 class="text-white text-base font-medium">Einstellungen</h1>
-      </div>
-      <hr class="w-full mt-5 border-white border-opacity-10"/>
-
-      <div class="w-full flex justify-between items-center py-4">
-        <div class="w-[40px] h-[40px] relative">
-          <img class="w-full h-full rounded-full" v-if="profilePicture" :src="profilePicture" alt="Profile Picture">
-          <button v-if="profilePicture" @click="handleDeleteProfilePicture" class="bg-red-700 rounded-full h-4 w-4 absolute top-0 right-0 translate-x-1/4 -translate-y-1/4">
-            <svg class="w-4 h-4 flex items-center justify-center" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9.5 3.205L8.795 2.5L6 5.295L3.205 2.5L2.5 3.205L5.295 6L2.5 8.795L3.205 9.5L6 6.705L8.795 9.5L9.5 8.795L6.705 6L9.5 3.205Z" fill="white"/>
-            </svg>
-          </button>
-          <div v-if="!profilePicture">
-            <generatePFP :full-name="fullName"/>
+      <div class="flex justify-center pt-24">
+        <div class="w-full w-max-[751px] h-auto px-5">
+          <div class="w-full flex justify-between items-center">
+            <h1 class="text-white text-base font-medium">Einstellungen</h1>
           </div>
-        </div>
-        <input ref="fileUpload" type="file" class="file:absolute file:right-5 file:top-1 hidden" accept="image/*" @input="handleProfilePictureUpload">
-        <button @click="clickProfilePictureUpload" class="text-xs md:text-sm lg:text-base font-semibold text-homeCard">Bild hochladen</button>
-      </div>
+          <hr class="w-full mt-5 border-white border-opacity-10"/>
 
-      <div class="w-full flex flex-col justify-start items-start text-white py-2">
-        <p>Vorname</p>
-        <input v-model="firstName" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="handleProfileName" type="text" placeholder="Vorname">
-      </div>
-
-      <div class="w-full flex flex-col justify-start items-start text-white py-2">
-        <p>Nachname</p>
-        <input v-model="lastName" class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="text" @keydown.enter="handleProfileName" placeholder="Nachname">
-      </div>
-
-      <div class="w-full flex flex-col justify-start items-start text-white py-2">
-        <p>E-Mail</p>
-        <input class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="email" v-model="email" @blur="changeEmail" @keydown.enter="changeEmail" @input="changeEmail">
-      </div>
-
-      <div v-if="emailChanged" class="w-full flex flex-col justify-start items-start text-white py-2">
-        <p>E-Mail wiederholen</p>
-        <input class="w-[280px] sm:w-[340px] h-[52px] px-4 bg-homeCard bg-opacity-5 rounded-md" type="email" v-model="emailConfirmation" @blur="handleProfileEmail" @keydown.enter="handleProfileEmail" >
-      </div>
-
-      <div class="relative">
-        <div class="w-full flex justify-start items-start text-white pt-4">
-          <button @click="showPasswordDialog = true" class="w-[170px] h-10 rounded-md bg-homeCard text-black font-semibold">Passwort ändern</button>
-        </div>
-        <div v-if="showPasswordDialog" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" @click="showPasswordDialog = false">
-          <div @click.stop>
-            <PasswordDialog @close="showPasswordDialog = false" />
+          <div class="w-full flex justify-between items-center py-4">
+            <div class="w-[40px] h-[40px] relative">
+              <img class="w-full h-full rounded-full" v-if="profilePicture" :src="profilePicture" alt="Profile Picture">
+              <button v-if="profilePicture" @click="handleDeleteProfilePicture" class="bg-red-700 rounded-full h-4 w-4 absolute top-0 right-0 translate-x-1/4 -translate-y-1/4">
+                <svg class="w-4 h-4 flex items-center justify-center" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9.5 3.205L8.795 2.5L6 5.295L3.205 2.5L2.5 3.205L5.295 6L2.5 8.795L3.205 9.5L6 6.705L8.795 9.5L9.5 8.795L6.705 6L9.5 3.205Z" fill="white"/>
+                </svg>
+              </button>
+              <div v-if="!profilePicture">
+                <generatePFP :full-name="fullName"/>
+              </div>
+            </div>
+            <input ref="fileUpload" type="file" class="file:absolute file:right-5 file:top-1 hidden" accept="image/*" @input="handleProfilePictureUpload">
+            <button @click="clickProfilePictureUpload" class="text-xs md:text-sm lg:text-base font-semibold text-homeCard">Bild hochladen</button>
           </div>
+
+          <div class="w-full flex flex-col justify-start items-start text-white py-2">
+            <ion-input label="Vorname" label-placement="floating" v-model="firstName" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="handleProfileName" type="text"></ion-input>
+          </div>
+
+          <div class="w-full flex flex-col justify-start items-start text-white py-2">
+            <ion-input label="Nachname" label-placement="floating" v-model="lastName" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="handleProfileName" type="text"></ion-input>
+          </div>
+
+          <div class="w-full flex flex-col justify-start items-start text-white py-2">
+            <ion-input label="Email" label-placement="floating" v-model="email" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="changeEmail" type="text"></ion-input>
+          </div>
+
+          <div v-if="emailChanged" class="w-full flex flex-col justify-start items-start text-white py-2">
+            <ion-input label="Email wiederholen" label-placement="floating" v-model="emailConfirmation" class="w-[280px] sm:w-[340px] h-[52px]  px-4 bg-homeCard bg-opacity-5 rounded-md" @keydown.enter="handleProfileEmail" type="text"></ion-input>
+          </div>
+
+          <div class="relative">
+            <div class="w-full flex justify-start items-start text-white pt-4">
+              <button @click="presentModal" class="w-[170px] h-10 rounded-md bg-homeCard text-black font-semibold">Passwort ändern</button>
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div class="w-full flex justify-end items-center py-2">
-        <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
-        <p v-if="confirmMessage" class="text-green-700">{{ confirmMessage }}</p>
-      </div>
-
-    </div>
-  </div>
     </ion-content>
   </ion-page>
 </template>
+
+

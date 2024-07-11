@@ -17,7 +17,6 @@ const fullName = ref(myAccount.value?.full_name);
 const email = ref(myAccount.value?.email);
 const emailConfirmation = ref(myAccount.value?.email);
 const emailChanged = ref(false);
-const showPasswordDialog = ref(false);
 const fileUpload = ref();
 
 onBeforeMount(async () => {
